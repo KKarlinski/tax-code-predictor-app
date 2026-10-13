@@ -1,0 +1,94 @@
+.taxDropZone {
+    min-height: 13.75rem;
+    border: 2px dashed #0a6ed1;
+    border-radius: 0.5rem;
+    background-color: #f7fafe;
+    box-sizing: border-box;
+}
+
+.taxDropZone:hover {
+    border-color: #0854a0;
+    background-color: #eef6ff;
+}
+
+.selectedFileBox {
+    padding: 0.75rem;
+    border: 1px solid #d5dadd;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    box-sizing: border-box;
+}
+
+.pdfPlaceholder {
+    min-height: 34rem;
+    border: 1px dashed #89919a;
+    border-radius: 0.5rem;
+    background-color: #f7f9fa;
+    box-sizing: border-box;
+}
+
+.processFlowContainer {
+    padding: 0.5rem 1rem 0.25rem 1rem;
+    box-sizing: border-box;
+}
+
+.processStep {
+    min-width: 8rem;
+}
+
+.processStepHeader {
+    width: 100%;
+}
+
+.processLine {
+    height: 0.125rem;
+    margin-top: 1rem;
+    background-color: #d5dadd;
+}
+
+.processLineActive {
+    background-color: #0a6ed1;
+}
+
+.processLineCompleted {
+    background-color: #188918;
+}
+
+.processLineHidden {
+    background-color: transparent;
+}
+
+.processStepText {
+    margin-top: 0.4rem;
+    color: #475e75;
+    font-size: 0.75rem;
+    font-weight: 400;
+}
+
+.processStepTextActive {
+    color: #0057d2;
+    font-weight: 700;
+}
+
+.processStepTextCompleted {
+    color: #256f3a;
+    font-weight: 600;
+}
+
+/* Circular appearance of step buttons */
+
+.processStep .sapMBtn {
+    flex-shrink: 0;
+}
+
+.processStep .sapMBtnInner {
+    min-width: 2rem;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border-radius: 50%;
+}
+
+.processStep .sapMBtnContent {
+    line-height: 1.875rem;
+}

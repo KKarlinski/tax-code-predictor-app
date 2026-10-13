@@ -1,0 +1,48 @@
+_schema-version: "3.3"
+
+ID: taxcodepredictor
+version: 0.0.1
+description: CAP backend for posting supplier invoices to SAP S/4HANA
+
+parameters:
+  enable-parallel-deployments: true
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+
+modules:
+  - name: taxcodepredictor-srv
+    type: nodejs
+    path: gen/srv
+
+    parameters:
+      buildpack: nodejs_buildpack
+      memory: 64M
+      disk-quota: 128M
+
+    build-parameters:
+      builder: npm-ci
+
+    provides:
+      - name: taxcodepredictor-srv-api
+        properties:
+          srv-url: ${default-url}
+
+    requires:
+      - name: taxcodepredictor-destination
+      - name: taxcodepredictor-connectivity
+
+resources:
+  - name: taxcodepredictor-destination
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-name: taxcodepredictor-destination
+
+  - name: taxcodepredictor-connectivity
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-name: taxcodepredictor-connectivity

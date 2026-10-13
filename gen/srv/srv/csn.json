@@ -1,0 +1,86 @@
+{
+  "definitions": {
+    "InvoiceService": {
+      "@source": "srv/invoice-service.cds",
+      "kind": "service",
+      "@path": "/invoice"
+    },
+    "InvoiceService.PostingResult": {
+      "kind": "type",
+      "elements": {
+        "success": {
+          "type": "cds.Boolean"
+        },
+        "supplierInvoice": {
+          "type": "cds.String"
+        },
+        "fiscalYear": {
+          "type": "cds.String"
+        },
+        "message": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "InvoiceService.postTestInvoice": {
+      "kind": "action",
+      "returns": {
+        "type": "InvoiceService.PostingResult"
+      }
+    },
+    "cds.outbox.Messages": {
+      "kind": "entity",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.UUID"
+        },
+        "timestamp": {
+          "type": "cds.Timestamp"
+        },
+        "target": {
+          "type": "cds.String"
+        },
+        "msg": {
+          "type": "cds.LargeString"
+        },
+        "attempts": {
+          "type": "cds.Integer",
+          "default": {
+            "val": 0
+          }
+        },
+        "partition": {
+          "type": "cds.Integer",
+          "default": {
+            "val": 0
+          }
+        },
+        "lastError": {
+          "type": "cds.LargeString"
+        },
+        "lastAttemptTimestamp": {
+          "type": "cds.Timestamp"
+        },
+        "status": {
+          "type": "cds.String",
+          "length": 23
+        },
+        "task": {
+          "type": "cds.String",
+          "length": 255
+        },
+        "appid": {
+          "type": "cds.String",
+          "length": 255
+        }
+      }
+    }
+  },
+  "meta": {
+    "creator": "CDS Compiler v7.1.1",
+    "compilerCsnFlavor": "inferred",
+    "flavor": "inferred"
+  },
+  "$version": "2.0"
+}

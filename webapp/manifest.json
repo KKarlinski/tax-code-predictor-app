@@ -1,0 +1,105 @@
+{
+  "_version": "1.89.0",
+  "sap.app": {
+    "id": "com.capgemini.invoice.taxcode.taxcodepredictor",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.33.0",
+      "toolsId": "9f229b99-20b7-41c3-9f1a-703be7af0d8a"
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.153.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.capgemini.invoice.taxcode.taxcodepredictor.i18n.i18n"
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "com.capgemini.invoice.taxcode.taxcodepredictor.view",
+        "async": true,
+        "viewPath": "com.capgemini.invoice.taxcode.taxcodepredictor.view"
+      },
+      "routes": [
+        {
+          "name": "RouteInvoiceProcessing",
+          "pattern": ":?query:",
+          "target": [
+            "TargetInvoiceProcessing"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetInvoiceProcessing": {
+          "id": "InvoiceProcessing",
+          "name": "InvoiceProcessing"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "com.capgemini.invoice.taxcode.taxcodepredictor.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    },
+        "libs": {
+  "sap.m": {},
+  "sap.ui.core": {},
+  "sap.ui.layout": {},
+  "sap.f": {},
+  "sap.ui.unified": {}
+}
+  }
+}

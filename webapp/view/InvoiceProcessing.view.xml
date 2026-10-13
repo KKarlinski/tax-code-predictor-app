@@ -1,0 +1,1062 @@
+<mvc:View
+    controllerName="com.capgemini.invoice.taxcode.taxcodepredictor.controller.InvoiceProcessing"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.f"
+    xmlns:u="sap.ui.unified"
+>
+    <f:DynamicPage
+        id="mainPage"
+        showFooter="true"
+        fitContent="false"
+        toggleHeaderOnTitleClick="false"
+    >
+        <!-- ====================================================== -->
+        <!-- PAGE TITLE                                             -->
+        <!-- ====================================================== -->
+
+        <f:title>
+            <f:DynamicPageTitle id="dynamicPageTitle">
+                <f:heading>
+                    <VBox id="pageTitleBox">
+                        <Title
+                            id="pageTitle"
+                            text="Invoice Tax Code Prediction"
+                            level="H1"
+                        />
+
+                        <Text
+                            id="pageSubtitle"
+                            text="Upload an invoice, review the extracted data and predicted tax codes, and submit to SAP."
+                        />
+                    </VBox>
+                </f:heading>
+
+                <f:actions>
+                    <ObjectStatus
+                        id="predictionStatus"
+                        text="Prediction Ready"
+                        state="Success"
+                        icon="sap-icon://status-positive"
+                    />
+                </f:actions>
+            </f:DynamicPageTitle>
+        </f:title>
+        <f:header>
+            <f:DynamicPageHeader
+                id="processHeader"
+                pinnable="false"
+            >
+                <VBox
+                    id="processHeaderContent"
+                    width="100%"
+                    class="processFlowContainer"
+                >
+                    <HBox
+                        id="processSteps"
+                        width="100%"
+                        alignItems="Start"
+                        justifyContent="SpaceBetween"
+                        renderType="Bare"
+                    >
+                        <!-- Step 1 -->
+
+                        <VBox
+                            id="processStep1"
+                            width="20%"
+                            alignItems="Center"
+                            class="processStep processStepActive"
+                        >
+                            <HBox
+                                id="processStep1Header"
+                                width="100%"
+                                alignItems="Center"
+                                renderType="Bare"
+                            >
+                                <VBox
+                                    id="processStep1LeftLine"
+                                    width="50%"
+                                    class="processLine processLineHidden"
+                                />
+
+                                <Button
+                                    id="processStep1Circle"
+                                    text="1"
+                                    type="Emphasized"
+                                    press=".onProcessStepPress"
+                                />
+
+                                <VBox
+                                    id="processStep1RightLine"
+                                    width="50%"
+                                    class="processLine processLineActive"
+                                />
+                            </HBox>
+
+                            <Text
+                                id="processStep1Text"
+                                text="Upload Invoice"
+                                textAlign="Center"
+                                class="processStepText processStepTextActive"
+                            />
+                        </VBox>
+
+                        <!-- Step 2 -->
+
+                        <VBox
+                            id="processStep2"
+                            width="20%"
+                            alignItems="Center"
+                            class="processStep"
+                        >
+                            <HBox
+                                id="processStep2Header"
+                                width="100%"
+                                alignItems="Center"
+                                renderType="Bare"
+                            >
+                                <VBox
+                                    id="processStep2LeftLine"
+                                    width="50%"
+                                    class="processLine processLineActive"
+                                />
+
+                                <Button
+                                    id="processStep2Circle"
+                                    text="2"
+                                    type="Default"
+                                    press=".onProcessStepPress"
+                                />
+
+                                <VBox
+                                    id="processStep2RightLine"
+                                    width="50%"
+                                    class="processLine"
+                                />
+                            </HBox>
+
+                            <Text
+                                id="processStep2Text"
+                                text="Select Company Code"
+                                textAlign="Center"
+                                class="processStepText"
+                            />
+                        </VBox>
+
+                        <!-- Step 3 -->
+
+                        <VBox
+                            id="processStep3"
+                            width="20%"
+                            alignItems="Center"
+                            class="processStep"
+                        >
+                            <HBox
+                                id="processStep3Header"
+                                width="100%"
+                                alignItems="Center"
+                                renderType="Bare"
+                            >
+                                <VBox
+                                    id="processStep3LeftLine"
+                                    width="50%"
+                                    class="processLine"
+                                />
+
+                                <Button
+                                    id="processStep3Circle"
+                                    text="3"
+                                    type="Default"
+                                    press=".onProcessStepPress"
+                                />
+
+                                <VBox
+                                    id="processStep3RightLine"
+                                    width="50%"
+                                    class="processLine"
+                                />
+                            </HBox>
+
+                            <Text
+                                id="processStep3Text"
+                                text="Extract Data"
+                                textAlign="Center"
+                                class="processStepText"
+                            />
+                        </VBox>
+
+                        <!-- Step 4 -->
+
+                        <VBox
+                            id="processStep4"
+                            width="20%"
+                            alignItems="Center"
+                            class="processStep"
+                        >
+                            <HBox
+                                id="processStep4Header"
+                                width="100%"
+                                alignItems="Center"
+                                renderType="Bare"
+                            >
+                                <VBox
+                                    id="processStep4LeftLine"
+                                    width="50%"
+                                    class="processLine"
+                                />
+
+                                <Button
+                                    id="processStep4Circle"
+                                    text="4"
+                                    type="Default"
+                                    press=".onProcessStepPress"
+                                />
+
+                                <VBox
+                                    id="processStep4RightLine"
+                                    width="50%"
+                                    class="processLine"
+                                />
+                            </HBox>
+
+                            <Text
+                                id="processStep4Text"
+                                text="Review &amp; Adjust"
+                                textAlign="Center"
+                                class="processStepText"
+                            />
+                        </VBox>
+
+                        <!-- Step 5 -->
+
+                        <VBox
+                            id="processStep5"
+                            width="20%"
+                            alignItems="Center"
+                            class="processStep"
+                        >
+                            <HBox
+                                id="processStep5Header"
+                                width="100%"
+                                alignItems="Center"
+                                renderType="Bare"
+                            >
+                                <VBox
+                                    id="processStep5LeftLine"
+                                    width="50%"
+                                    class="processLine"
+                                />
+
+                                <Button
+                                    id="processStep5Circle"
+                                    text="5"
+                                    type="Default"
+                                    press=".onProcessStepPress"
+                                />
+
+                                <VBox
+                                    id="processStep5RightLine"
+                                    width="50%"
+                                    class="processLine processLineHidden"
+                                />
+                            </HBox>
+                            <Text
+                                id="processStep5Text"
+                                text="Submit to SAP"
+                                textAlign="Center"
+                                class="processStepText"
+                            />
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </f:DynamicPageHeader>
+        </f:header>
+        <!-- ====================================================== -->
+        <!-- PAGE CONTENT                                           -->
+        <!-- ====================================================== -->
+
+        <f:content>
+            <VBox
+                id="mainContent"
+                width="100%"
+                class="sapUiMediumMargin"
+            >
+                <!-- ================================================== -->
+                <!-- UPLOAD AND COMPANY CODE                            -->
+                <!-- ================================================== -->
+
+                <Panel
+                    id="uploadAndCompanyPanel"
+                    width="100%"
+                    class="sapUiSmallMarginBottom"
+                >
+                    <content>
+                        <l:Grid
+                            id="uploadCompanyGrid"
+                            width="100%"
+                            defaultSpan="XL12 L12 M12 S12"
+                            hSpacing="1"
+                            vSpacing="1"
+                        >
+                            <!-- Upload invoice -->
+
+                            <VBox
+                                id="uploadSection"
+                                width="100%"
+                            >
+                                <layoutData>
+                                    <l:GridData
+                                        id="uploadSectionGridData"
+                                        span="XL7 L7 M12 S12"
+                                    />
+                                </layoutData>
+
+                                <Title
+                                    id="uploadSectionTitle"
+                                    text="1. Upload Invoice"
+                                    level="H3"
+                                    class="sapUiSmallMarginBottom"
+                                />
+
+                                <VBox
+                                    id="dropBox"
+                                    width="100%"
+                                    height="220px"
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="taxDropZone"
+                                >
+                                    <core:Icon
+                                        id="dragIcon"
+                                        src="sap-icon://pdf-attachment"
+                                        size="4rem"
+                                        color="#0A6ED1"
+                                        class="sapUiTinyMarginBottom"
+                                    />
+
+                                    <Title
+                                        id="dragTitle"
+                                        text="Drag &amp; Drop a PDF file here"
+                                        level="H4"
+                                    />
+
+                                    <Text
+                                        id="dragSubtitle"
+                                        text="or select a file from your computer"
+                                        class="sapUiTinyMarginTop sapUiSmallMarginBottom"
+                                    />
+
+                                    <u:FileUploader
+                                        id="invoiceUploader"
+                                        name="invoice"
+                                        width="auto"
+                                        buttonOnly="true"
+                                        buttonText="Select File"
+                                        fileType="pdf"
+                                        sameFilenameAllowed="true"
+                                        change=".onFileSelected"
+                                    />
+                                </VBox>
+
+                                <!-- Selected file information -->
+
+                                <HBox
+                                    id="selectedFileBox"
+                                    visible="false"
+                                    width="100%"
+                                    alignItems="Center"
+                                    class="sapUiSmallMarginTop selectedFileBox"
+                                >
+                                    <core:Icon
+                                        id="selectedFileIcon"
+                                        src="sap-icon://pdf-attachment"
+                                        size="2rem"
+                                        color="#BB0000"
+                                        class="sapUiSmallMarginEnd"
+                                    />
+
+                                    <VBox
+                                        id="selectedFileDetails"
+                                        width="100%"
+                                    >
+                                        <Text
+                                            id="selectedFileName"
+                                            text="No file selected"
+                                        />
+
+                                        <ObjectStatus
+                                            id="uploadStatus"
+                                            text="Upload completed"
+                                            state="Success"
+                                            icon="sap-icon://status-positive"
+                                        />
+                                    </VBox>
+
+                                    <Button
+                                        id="removeFileButton"
+                                        icon="sap-icon://decline"
+                                        type="Transparent"
+                                        tooltip="Remove selected file"
+                                        press=".onRemoveFile"
+                                    />
+                                </HBox>
+                            </VBox>
+
+                            <!-- Company Code -->
+
+                            <VBox
+                                id="companyCodeSection"
+                                width="100%"
+                            >
+                                <layoutData>
+                                    <l:GridData
+                                        id="companyCodeSectionGridData"
+                                        span="XL5 L5 M12 S12"
+                                    />
+                                </layoutData>
+
+                                <Title
+                                    id="companyCodeSectionTitle"
+                                    text="2. Company Code (BUKRS)"
+                                    level="H3"
+                                    class="sapUiSmallMarginBottom"
+                                />
+
+                                <Label
+                                    id="companyCodeLabel"
+                                    text="Company Code"
+                                    required="true"
+                                    labelFor="companyCodeSelect"
+                                />
+
+                                <Select
+                                    id="companyCodeSelect"
+                                    width="100%"
+                                    selectedKey=" "
+                                >
+                                    <items>
+                                        <core:Item
+                                            id="companyCode0"
+                                            key=" "
+                                            text=" "
+                                        />
+                                        <core:Item
+                                            id="companyCode1000"
+                                            key="1000"
+                                            text="1000 - SAP Polska Sp. z o.o."
+                                        />
+
+                                        <core:Item
+                                            id="companyCode2000"
+                                            key="2000"
+                                            text="2000 - Example Company Germany"
+                                        />
+                                    </items>
+                                </Select>
+
+                                <ObjectStatus
+                                    id="companyCodeStatus"
+                                    text="Company Code selected"
+                                    state="Information"
+                                    icon="sap-icon://building"
+                                    class="sapUiSmallMarginTop"
+                                />
+                            </VBox>
+                        </l:Grid>
+                    </content>
+                </Panel>
+
+                <!-- ================================================== -->
+                <!-- HEADER DATA AND INVOICE PREVIEW                    -->
+                <!-- Independent panels displayed next to each other   -->
+                <!-- ================================================== -->
+
+                <l:Grid
+                    id="invoiceReviewGrid"
+                    width="100%"
+                    defaultSpan="XL12 L12 M12 S12"
+                    hSpacing="1"
+                    vSpacing="1"
+                    class="sapUiSmallMarginBottom"
+                >
+                    <!-- Header Data -->
+
+                    <Panel
+                        id="headerDataPanel"
+                        width="100%"
+                        headerText="Header Data"
+                    >
+                        <layoutData>
+                            <l:GridData
+                                id="headerDataGridData"
+                                span="XL7 L7 M12 S12"
+                            />
+                        </layoutData>
+
+                        <content>
+                            <form:SimpleForm
+                                id="headerForm"
+                                editable="true"
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="4"
+                                labelSpanL="4"
+                                labelSpanM="4"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="0"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="2"
+                                columnsL="2"
+                                columnsM="1"
+                                singleContainerFullSize="false"
+                            >
+                                <!-- <Label
+                                    id="lblCompanyCodeHeader"
+                                    text="Company Code (BUKRS)"
+                                    required="true"
+                                    labelFor="inpCompanyCodeHeader"
+                                />
+
+                                <Input
+                                    id="inpCompanyCodeHeader"
+                                    value=" "
+                                    editable="false"
+                                /> -->
+
+                                <Label
+                                    id="lblSupplier"
+                                    text="Supplier (LIFNR)"
+                                    required="true"
+                                    labelFor="inpSupplier"
+                                />
+
+                                <Input
+                                    id="inpSupplier"
+                                    value="0000123456"
+                                    showValueHelp="true"
+                                    valueHelpRequest=".onSupplierValueHelp"
+                                />
+
+                                <Label
+                                    id="lblReference"
+                                    text="Reference (XBLNR)"
+                                    labelFor="inpReference"
+                                />
+
+                                <Input
+                                    id="inpReference"
+                                    value="INV-2024-001"
+                                    maxLength="16"
+                                />
+
+                                <Label
+                                    id="lblDocumentDate"
+                                    text="Document Date"
+                                    labelFor="dpDocumentDate"
+                                />
+
+                                <DatePicker
+                                    id="dpDocumentDate"
+                                    valueFormat="yyyy-MM-dd"
+                                    displayFormat="dd.MM.yyyy"
+                                    placeholder="Select document date"
+                                />
+
+                                <Label
+                                    id="lblPostingDate"
+                                    text="Posting Date"
+                                    labelFor="dpPostingDate"
+                                />
+
+                                <DatePicker
+                                    id="dpPostingDate"
+                                    valueFormat="yyyy-MM-dd"
+                                    displayFormat="dd.MM.yyyy"
+                                    placeholder="Select posting date"
+                                />
+
+                                <Label
+                                    id="lblCurrency"
+                                    text="Currency"
+                                    labelFor="cmbCurrency"
+                                />
+
+                                <ComboBox
+                                    id="cmbCurrency"
+                                    selectedKey="EUR"
+                                    width="100%"
+                                >
+                                    <items>
+                                        <core:Item
+                                            id="currencyEUR"
+                                            key="EUR"
+                                            text="EUR"
+                                        />
+
+                                        <core:Item
+                                            id="currencyPLN"
+                                            key="PLN"
+                                            text="PLN"
+                                        />
+
+                                        <core:Item
+                                            id="currencyUSD"
+                                            key="USD"
+                                            text="USD"
+                                        />
+                                    </items>
+                                </ComboBox>
+
+                                <Label
+                                    id="lblGrossAmount"
+                                    text="Gross Amount"
+                                    labelFor="inpGrossAmount"
+                                />
+
+                                <Input
+                                    id="inpGrossAmount"
+                                    value="1230.00"
+                                    type="Number"
+                                    textAlign="End"
+                                />
+
+                                <Label
+                                    id="lblTaxAmount"
+                                    text="Tax Amount"
+                                    labelFor="inpTaxAmount"
+                                />
+
+                                <Input
+                                    id="inpTaxAmount"
+                                    value="230.00"
+                                    type="Number"
+                                    textAlign="End"
+                                />
+                            </form:SimpleForm>
+                        </content>
+                    </Panel>
+
+                    <!-- Invoice Preview -->
+
+                    <Panel
+                        id="pdfPreviewPanel"
+                        width="100%"
+                    >
+                        <layoutData>
+                            <l:GridData
+                                id="pdfPreviewGridData"
+                                span="XL5 L5 M12 S12"
+                            />
+                        </layoutData>
+
+                        <headerToolbar>
+                            <OverflowToolbar id="pdfPreviewToolbar">
+                                <Title
+                                    id="pdfPreviewToolbarTitle"
+                                    text="Invoice Preview"
+                                    level="H3"
+                                />
+
+                                <ToolbarSpacer id="pdfToolbarSpacer" />
+
+                                <ObjectStatus
+                                    id="pdfPreviewStatus"
+                                    text="No PDF"
+                                    state="None"
+                                />
+
+                                <Button
+                                    id="openPdfButton"
+                                    icon="sap-icon://full-screen"
+                                    type="Transparent"
+                                    tooltip="Open PDF in full screen"
+                                    visible="false"
+                                    press=".onOpenPdf"
+                                />
+                            </OverflowToolbar>
+                        </headerToolbar>
+
+                        <content>
+                            <VBox
+                                id="pdfPreviewContainer"
+                                width="100%"
+                                height="550px"
+                                renderType="Bare"
+                            >
+                                <!-- Placeholder displayed before upload -->
+
+                                <VBox
+                                    id="pdfPlaceholder"
+                                    visible="true"
+                                    width="100%"
+                                    height="100%"
+                                    alignItems="Center"
+                                    justifyContent="Center"
+                                    class="pdfPlaceholder"
+                                >
+                                    <core:Icon
+                                        id="pdfPlaceholderIcon"
+                                        src="sap-icon://pdf-attachment"
+                                        size="5rem"
+                                        color="#6A6D70"
+                                        class="sapUiSmallMarginBottom"
+                                    />
+
+                                    <Title
+                                        id="pdfPlaceholderTitle"
+                                        text="No PDF uploaded"
+                                        level="H4"
+                                    />
+
+                                    <Text
+                                        id="pdfPlaceholderText"
+                                        text="The uploaded invoice will be displayed here."
+                                        textAlign="Center"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                </VBox>
+
+                                <!-- PDFViewer displayed after upload -->
+
+                                <core:HTML
+                                    id="pdfHtmlPreview"
+                                    visible="false"
+                                    preferDOM="false"
+                                    sanitizeContent="false"
+                                />
+                            </VBox>
+                        </content>
+                    </Panel>
+                </l:Grid>
+
+                <!-- ================================================== -->
+                <!-- INVOICE ITEMS                                      -->
+                <!-- ================================================== -->
+
+                <Panel
+                    id="invoiceItemsPanel"
+                    width="100%"
+                    headerText="Invoice Items"
+                    class="sapUiSmallMarginBottom"
+                >
+                    <content>
+                        <Table
+                            id="itemsTable"
+                            width="100%"
+                            inset="false"
+                            fixedLayout="false"
+                        >
+                            <columns>
+                                <Column
+                                    id="colBuzei"
+                                    width="6rem"
+                                >
+                                    <Text
+                                        id="txtColBuzei"
+                                        text="Item Line (BUZEI)"
+                                    />
+                                </Column>
+
+                                <Column
+                                    id="colHkont"
+                                    width="11rem"
+                                >
+                                    <Text
+                                        id="txtColHkont"
+                                        text="G/L Account (HKONT)"
+                                    />
+                                </Column>
+
+                                <Column
+                                    id="colWrbtr"
+                                    width="10rem"
+                                >
+                                    <Text
+                                        id="txtColWrbtr"
+                                        text="Amount (WRBTR)"
+                                    />
+                                </Column>
+
+                                <Column
+                                    id="colMwskz"
+                                    width="9rem"
+                                >
+                                    <Text
+                                        id="txtColMwskz"
+                                        text="Tax Code (MWSKZ)"
+                                    />
+                                </Column>
+
+                                <Column
+                                    id="colConfidence"
+                                    width="12rem"
+                                >
+                                    <Text
+                                        id="txtColConfidence"
+                                        text="Confidence"
+                                    />
+                                </Column>
+
+                                <Column
+                                    id="colSgtxt"
+                                    width="15rem"
+                                >
+                                    <Text
+                                        id="txtColSgtxt"
+                                        text="Item Text (SGTXT)"
+                                    />
+                                </Column>
+
+                                <Column
+                                    id="colKostl"
+                                    width="10rem"
+                                >
+                                    <Text
+                                        id="txtColKostl"
+                                        text="Cost Center (KOSTL)"
+                                    />
+                                </Column>
+                            </columns>
+
+                            <items>
+                                <ColumnListItem
+                                    id="item1"
+                                    vAlign="Middle"
+                                >
+                                    <cells>
+                                        <Text
+                                            id="txtItemLine1"
+                                            text="1"
+                                        />
+
+                                        <Input
+                                            id="inpHkont1"
+                                            value="400000"
+                                            showValueHelp="true"
+                                            valueHelpRequest=".onGlAccountValueHelp"
+                                        />
+
+                                        <Input
+                                            id="inpAmount1"
+                                            value="1000.00"
+                                            type="Number"
+                                            textAlign="End"
+                                        />
+
+                                        <ComboBox
+                                            id="cmbTaxCode1"
+                                            selectedKey="V1"
+                                            width="100%"
+                                        >
+                                            <items>
+                                                <core:Item
+                                                    id="taxCodeV1"
+                                                    key="V1"
+                                                    text="V1"
+                                                />
+
+                                                <core:Item
+                                                    id="taxCodeA0"
+                                                    key="A0"
+                                                    text="A0"
+                                                />
+                                            </items>
+                                        </ComboBox>
+
+                                        <ProgressIndicator
+                                            id="prgConfidence1"
+                                            percentValue="92"
+                                            displayValue="92%"
+                                            state="Success"
+                                            width="100%"
+                                        />
+
+                                        <Input
+                                            id="inpItemText1"
+                                            value="Laptop Lenovo"
+                                        />
+
+                                        <Input
+                                            id="inpCostCenter1"
+                                            value="IT100"
+                                            showValueHelp="true"
+                                            valueHelpRequest=".onCostCenterValueHelp"
+                                        />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </content>
+                </Panel>
+
+                <!-- ================================================== -->
+                <!-- AI REASONING                                       -->
+                <!-- ================================================== -->
+
+                <Panel
+                    id="aiReasoningPanel"
+                    width="100%"
+                    expandable="true"
+                    expanded="true"
+                    headerText="AI Reasoning for Tax Code"
+                    class="sapUiSmallMarginBottom"
+                >
+                    <content>
+                        <l:Grid
+                            id="aiReasoningGrid"
+                            width="100%"
+                            defaultSpan="XL12 L12 M12 S12"
+                            hSpacing="1"
+                            vSpacing="1"
+                            class="sapUiMediumMargin"
+                        >
+                            <!-- Selected Tax Code -->
+
+                            <VBox
+                                id="selectedPredictionBox"
+                                width="100%"
+                            >
+                                <layoutData>
+                                    <l:GridData
+                                        id="selectedPredictionGridData"
+                                        span="XL4 L4 M12 S12"
+                                    />
+                                </layoutData>
+
+                                <Label
+                                    id="selectedTaxCodeLabel"
+                                    text="Selected Tax Code"
+                                />
+
+                                <ObjectStatus
+                                    id="selectedTaxCodeStatus"
+                                    text="V1 - 23% Domestic VAT"
+                                    state="Information"
+                                    icon="sap-icon://lightbulb"
+                                />
+
+                                <Label
+                                    id="predictionConfidenceLabel"
+                                    text="Confidence"
+                                    class="sapUiSmallMarginTop"
+                                />
+
+                                <ProgressIndicator
+                                    id="predictionConfidenceIndicator"
+                                    percentValue="92"
+                                    displayValue="92%"
+                                    state="Success"
+                                    width="100%"
+                                />
+                            </VBox>
+
+                            <!-- Reasoning -->
+
+                            <VBox
+                                id="predictionReasoningBox"
+                                width="100%"
+                            >
+                                <layoutData>
+                                    <l:GridData
+                                        id="predictionReasoningGridData"
+                                        span="XL4 L4 M12 S12"
+                                    />
+                                </layoutData>
+
+                                <Label
+                                    id="reasoningLabel"
+                                    text="Reasoning"
+                                />
+
+                                <Text
+                                    id="txtSupplierCountry"
+                                    text="Supplier Country: DE"
+                                />
+
+                                <Text
+                                    id="txtBuyerCountry"
+                                    text="Buyer Country: PL"
+                                />
+
+                                <Text
+                                    id="txtSupplyType"
+                                    text="Supply Type: GOODS"
+                                />
+
+                                <Text
+                                    id="txtVatRate"
+                                    text="Detected VAT Rate: 23%"
+                                />
+
+                                <Text
+                                    id="txtCompanyCodeReason"
+                                    text="Company Code 1000 allows tax code V1"
+                                />
+                            </VBox>
+
+                            <!-- Alternative Candidates -->
+
+                            <VBox
+                                id="alternativeCandidatesBox"
+                                width="100%"
+                            >
+                                <layoutData>
+                                    <l:GridData
+                                        id="alternativeCandidatesGridData"
+                                        span="XL4 L4 M12 S12"
+                                    />
+                                </layoutData>
+
+                                <Label
+                                    id="alternativeCandidatesLabel"
+                                    text="Alternative Candidates"
+                                />
+
+                                <ObjectStatus
+                                    id="candidateV1"
+                                    text="V1 - 23% Domestic VAT: 92%"
+                                    state="Success"
+                                />
+
+                                <ObjectStatus
+                                    id="candidateA0"
+                                    text="A0 - Tax Exempt: 5%"
+                                    state="None"
+                                />
+
+                                <ObjectStatus
+                                    id="candidateV0"
+                                    text="V0 - 0% VAT: 3%"
+                                    state="None"
+                                />
+                            </VBox>
+                        </l:Grid>
+                    </content>
+                </Panel>
+            </VBox>
+        </f:content>
+
+        <!-- ====================================================== -->
+        <!-- PAGE FOOTER                                            -->
+        <!-- ====================================================== -->
+
+        <f:footer>
+            <OverflowToolbar id="footerToolbar">
+                <ToolbarSpacer id="footerToolbarSpacer" />
+
+                <Button
+                    id="btnSubmitToSap"
+                    text="Submit to SAP"
+                    type="Emphasized"
+                    icon="sap-icon://upload-to-cloud"
+                    press=".onSubmitToSap"
+                />
+            </OverflowToolbar>
+        </f:footer>
+    </f:DynamicPage>
+</mvc:View>

@@ -1,0 +1,34 @@
+{
+  "requires": {
+    "[hybrid]": {
+      "destinations": {
+        "binding": {
+          "type": "cf",
+          "apiEndpoint": "https://api.cf.us10-001.hana.ondemand.com",
+          "org": "Capgemini Polska Sp. z o.o._capgemini-tech-5-ut5z6aqv",
+          "space": "DEV Space",
+          "instance": "taxcodepredictor-destination",
+          "key": "taxcodepredictor-destination-key"
+        },
+        "kind": "destinations",
+        "vcap": {
+          "name": "destinations"
+        }
+      },
+      "connectivity": {
+        "binding": {
+          "type": "cf",
+          "apiEndpoint": "https://api.cf.us10-001.hana.ondemand.com",
+          "org": "Capgemini Polska Sp. z o.o._capgemini-tech-5-ut5z6aqv",
+          "space": "DEV Space",
+          "instance": "taxcodepredictor-connectivity",
+          "key": "taxcodepredictor-connectivity-key"
+        },
+        "kind": "connectivity",
+        "vcap": {
+          "name": "connectivity"
+        }
+      }
+    }
+  }
+}
