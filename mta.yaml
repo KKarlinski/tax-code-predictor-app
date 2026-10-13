@@ -1,48 +1,172 @@
 _schema-version: "3.3"
-
 ID: taxcodepredictor
-version: 0.0.1
 description: CAP backend for posting supplier invoices to SAP S/4HANA
+version: 0.0.1
+modules:
+  - name: taxcodepredictor-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: taxcodepredictor-destination
+      - name: taxcodepredictor-connectivity
+      - name: taxcodepredictor-auth
+    provides:
+      - name: taxcodepredictor-srv-api
+        properties:
+          srv-url: ${default-url}
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpack: nodejs_buildpack
+      disk-quota: 256M
+      instances: 1
+      memory: 256M
+    build-parameters:
+      builder: npm-ci
+  - name: taxcodepredictor
+    type: approuter.nodejs
+    path: .deploy/app-router
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          forwardAuthToken: true
+          name: srv-api
+          url: ~{srv-url}
+      - name: taxcodepredictor-destination
+      - name: taxcodepredictor-html5-runtime
+      - name: taxcodepredictor-auth
+    provides:
+      - name: app-api
+        properties:
+          app-protocol: ${protocol}
+          app-uri: ${default-uri}
+    parameters:
+      disk-quota: 256M
+      keep-existing-routes: true
+      memory: 256M
+  - name: taxcodepredictor-app-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: taxcodepredictor-html5-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - artifacts:
+            - comcapgeminiinvoicetaxcodetaxcodepredictor.zip
+          name: comcapgeminiinvoicetaxcodetaxcodepredictor
+          target-path: resources/
+  - name: comcapgeminiinvoicetaxcodetaxcodepredictor
+    type: html5
+    path: app/taxcodepredictor-ui
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
 
+  - name: taxcodepredictor-app-deployer
+    type: com.sap.application.content
+    path: gen
+    build-parameters:
+      build-result: app/
+      requires:
+        - name: taxcodepredictortaxcodepredictorui
+          artifacts:
+            - comcapgeminiinvoicetaxcodetaxcodepredictor.zip
+          target-path: app/
+        - name: comcapgeminiinvoicetaxcodetaxcodepredictor
+          type: html5
+          path: app/taxcodepredictor-ui
+          build-parameters:
+            build-result: dist
+            builder: custom
+            commands:
+              - npm install
+              - npm run build:cf
+            supported-platforms:
+              []
+    requires:
+      - name: taxcodepredictor-auth
+      - name: srv-api
+      - name: taxcodepredictor-html5-repo-host
+        parameters:
+          content-target: true
+          config:
+            HTML5Runtime_enabled: true
+
+  - name: taxcodepredictortaxcodepredictorui
+    type: html5
+    path: app/taxcodepredictor-ui
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm ci
+        - npm run build
+      supported-platforms:
+        []
+resources:
+  - name: taxcodepredictor-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: false
+        init_data:
+          instance:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: https://ui5.sap.com
+              - Authentication: NoAuthentication
+                HTML5.DynamicDestination: true
+                HTML5.ForwardAuthToken: true
+                Name: srv-api
+                ProxyType: Internet
+                Type: HTTP
+                URL: ~{srv-api/srv-url}
+            existing_destinations_policy: update
+      service: destination
+      service-plan: lite
+    requires:
+      - name: srv-api
+  - name: taxcodepredictor-connectivity
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-name: taxcodepredictor-connectivity
+  - name: taxcodepredictor-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+  - name: taxcodepredictor-html5-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
+  - name: taxcodepredictor-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+    requires:
+      - name: app-api
 parameters:
+  deploy_mode: html5-repo
   enable-parallel-deployments: true
-
 build-parameters:
   before-all:
     - builder: custom
       commands:
         - npm ci
         - npx cds build --production
-
-modules:
-  - name: taxcodepredictor-srv
-    type: nodejs
-    path: gen/srv
-
-    parameters:
-      buildpack: nodejs_buildpack
-      memory: 64M
-      disk-quota: 128M
-
-    build-parameters:
-      builder: npm-ci
-
-    provides:
-      - name: taxcodepredictor-srv-api
-        properties:
-          srv-url: ${default-url}
-
-    requires:
-      - name: taxcodepredictor-destination
-      - name: taxcodepredictor-connectivity
-
-resources:
-  - name: taxcodepredictor-destination
-    type: org.cloudfoundry.existing-service
-    parameters:
-      service-name: taxcodepredictor-destination
-
-  - name: taxcodepredictor-connectivity
-    type: org.cloudfoundry.existing-service
-    parameters:
-      service-name: taxcodepredictor-connectivity

@@ -37,7 +37,7 @@ module.exports = cds.service.impl(async function () {
 
             const result = await s4InvoiceService.send({
                 method: "POST",
-                path: "/A_SupplierInvoice",
+                path: "/A_SupplierInvoice?sap-client=500",
                 data: payload,
                 headers: {
                     Accept: "application/json",
@@ -63,23 +63,31 @@ module.exports = cds.service.impl(async function () {
                 message: "Supplier invoice created successfully."
             };
         } catch (error) {
-            console.error("S/4HANA posting failed");
-            console.error(error);
-
-            const statusCode =
-                error.statusCode ||
+            const status =
+                error.reason?.response?.status ||
                 error.response?.status ||
+                error.statusCode ||
                 502;
+
+            const sapClient =
+                error.reason?.response?.headers?.["set-cookie"]?.[0] ||
+                error.response?.headers?.["set-cookie"]?.[0] ||
+                "";
 
             const sapMessage =
                 error.reason?.message ||
                 error.response?.data?.error?.message?.value ||
-                error.response?.data?.error?.message ||
                 error.message ||
-                "Unknown error returned by S/4HANA";
+                "Unknown S/4HANA error";
+
+            console.error("S/4HANA posting failed", {
+                status,
+                message: sapMessage,
+                sapClient
+            });
 
             return req.reject(
-                statusCode,
+                status === 401 ? 502 : status,
                 `S/4HANA posting failed: ${sapMessage}`
             );
         }

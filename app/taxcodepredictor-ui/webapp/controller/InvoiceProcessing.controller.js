@@ -210,7 +210,7 @@ background-color: #ffffff;
 
                 try {
                     const oResponse = await fetch(
-                        "http://localhost:4004/odata/v4/invoice/postTestInvoice",
+                        "/invoice/postTestInvoice",
                         {
                             method: "POST",
                             headers: {

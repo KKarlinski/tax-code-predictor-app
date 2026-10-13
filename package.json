@@ -1,49 +1,47 @@
 {
   "name": "taxcodepredictor",
   "version": "0.0.1",
-  "description": "SAP Fiori application for supplier invoice processing",
-  "keywords": [
-    "ui5",
-    "openui5",
-    "sapui5"
-  ],
-  "main": "webapp/index.html",
+  "description": "CAP backend for supplier invoice processing",
+  "private": true,
   "dependencies": {
     "@sap-cloud-sdk/connectivity": "^4.9.1",
     "@sap-cloud-sdk/http-client": "^4.9.1",
-    "@sap/cds": "10.1.1"
+    "@sap/cds": "10.1.1",
+    "@sap/xssec": "^4"
   },
   "devDependencies": {
-    "@sap-ux/eslint-plugin-fiori-tools": "^10.0.0",
     "@sap/cds-dk": "10.1.1",
-    "@sap/ux-ui5-tooling": "1",
-    "@ui5/cli": "^4.0.33",
-    "eslint": "^10"
+    "rimraf": "^5.0.5",
+    "mbt": "^1.2.49"
   },
   "scripts": {
-    "start": "fiori run --open \"test/flp.html#app-preview\"",
-    "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flp.html#app-preview\"",
-    "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
-    "lint": "eslint ./",
-    "deploy": "fiori verify",
-    "deploy-config": "fiori add deploy-config",
-    "start-noflp": "fiori run --open \"/index.html?sap-ui-xx-viewCache=false\"",
-    "int-test": "fiori run --open \"test/integration/opaTests.qunit.html\"",
-    "start-variants-management": "fiori run --open \"/preview.html#app-preview\"",
-    "unit-test": "fiori run --open \"test/unit/unitTests.qunit.html\""
+    "start": "cds-serve",
+    "watch:cap": "cds watch",
+    "build:mta": "mbt build",
+    "undeploy": "cf undeploy taxcodepredictor --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
   },
   "cds": {
     "requires": {
+      "auth": {
+        "kind": "xsuua"
+      },
       "S4_INVOICE_API": {
         "kind": "odata-v2",
         "csrf": true,
         "csrfInBatch": true,
         "credentials": {
-          "destination": "SFH",
+          "destination": "SFH500_KK",
           "path": "/sap/opu/odata/sap/API_SUPPLIERINVOICE_PROCESS_SRV"
+        }
+      },
+      "html5-repo": true,
+      "[production]": {
+        "auth": {
+          "kind": "xsuaa"
         }
       }
     }
-  },
-  "sapuxLayer": "CUSTOMER_BASE"
+  }
 }

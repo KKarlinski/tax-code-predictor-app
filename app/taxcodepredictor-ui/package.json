@@ -1,0 +1,32 @@
+{
+  "name": "taxcodepredictor-ui",
+  "version": "0.0.1",
+  "description": "SAP Fiori application for supplier invoice processing",
+  "private": true,
+  "keywords": [
+    "ui5",
+    "openui5",
+    "sapui5"
+  ],
+  "main": "webapp/index.html",
+  "scripts": {
+    "start": "fiori run --open \"test/flp.html#app-preview\"",
+    "start-local": "fiori run --config ./ui5-local.yaml --open \"test/flp.html#app-preview\"",
+    "start-noflp": "fiori run --open \"/index.html?sap-ui-xx-viewCache=false\"",
+    "build": "npm run build:cf",
+    "lint": "eslint ./",
+    "deploy": "fiori verify",
+    "deploy-config": "fiori add deploy-config",
+    "int-test": "fiori run --open \"test/integration/opaTests.qunit.html\"",
+    "unit-test": "fiori run --open \"test/unit/unitTests.qunit.html\"",
+    "build:cf": "ui5 build preload --clean-dest --config ui5-deploy.yaml --include-task=generateCachebusterInfo"
+  },
+  "devDependencies": {
+    "@sap-ux/eslint-plugin-fiori-tools": "^10.0.0",
+    "@sap/ux-ui5-tooling": "1",
+    "@ui5/cli": "^4.0.33",
+    "eslint": "^10",
+    "ui5-task-zipper": "^3.4.x"
+  },
+  "sapuxLayer": "CUSTOMER_BASE"
+}
