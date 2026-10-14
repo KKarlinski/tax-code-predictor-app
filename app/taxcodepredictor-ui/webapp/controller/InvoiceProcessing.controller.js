@@ -209,42 +209,98 @@ background-color: #ffffff;
                 oView.setBusy(true);
 
                 try {
+                    // 1. Pobranie tokenu CSRF od approutera/CAP
+                    const oTokenResponse = await fetch("/invoice/$metadata", {
+                        method: "GET",
+                        headers: {
+                            Accept: "application/xml",
+                            "X-CSRF-Token": "Fetch"
+                        },
+                        credentials: "same-origin"
+                    });
+
+                    if (!oTokenResponse.ok) {
+                        const sTokenErrorText = await oTokenResponse.text();
+
+                        throw new Error(
+                            sTokenErrorText ||
+                            `Could not retrieve CSRF token. HTTP ${oTokenResponse.status}.`
+                        );
+                    }
+
+                    const sCsrfToken =
+                        oTokenResponse.headers.get("X-CSRF-Token") ||
+                        oTokenResponse.headers.get("x-csrf-token");
+
+                    if (!sCsrfToken) {
+                        throw new Error(
+                            "The server did not return an X-CSRF-Token."
+                        );
+                    }
+
+                    // 2. Wysłanie właściwego żądania POST
                     const oResponse = await fetch(
                         "/invoice/postTestInvoice",
                         {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
-                                Accept: "application/json"
+                                Accept: "application/json",
+                                "X-CSRF-Token": sCsrfToken
                             },
+                            credentials: "same-origin",
                             body: JSON.stringify({})
                         }
                     );
 
-                    const oResult = await oResponse.json();
+                    // 3. Odczytujemy najpierw tekst, bo odpowiedź błędu
+                    // nie zawsze jest JSON-em.
+                    const sResponseText = await oResponse.text();
+
+                    let oResult = {};
+
+                    if (sResponseText) {
+                        try {
+                            oResult = JSON.parse(sResponseText);
+                        } catch (oParseError) {
+                            // Pozostawiamy pusty obiekt i wykorzystujemy tekst odpowiedzi.
+                            oResult = {};
+                        }
+                    }
 
                     if (!oResponse.ok) {
                         const sErrorMessage =
+                            oResult.error?.message?.value ||
                             oResult.error?.message ||
-                            "Posting to SAP failed.";
+                            oResult.message ||
+                            sResponseText ||
+                            `Posting to SAP failed with HTTP ${oResponse.status}.`;
 
                         throw new Error(sErrorMessage);
                     }
 
                     const sInvoiceNumber =
-                        oResult.supplierInvoice || "unknown";
+                        oResult.supplierInvoice ||
+                        oResult.SupplierInvoice ||
+                        "unknown";
 
                     const sFiscalYear =
-                        oResult.fiscalYear || "";
+                        oResult.fiscalYear ||
+                        oResult.FiscalYear ||
+                        "";
 
-                    sap.m.MessageBox.success(
-                        `Invoice ${sInvoiceNumber} ${sFiscalYear} was created successfully.`
-                    );
+                    const sSuccessMessage = sFiscalYear
+                        ? `Invoice ${sInvoiceNumber}, fiscal year ${sFiscalYear}, was created successfully.`
+                        : `Invoice ${sInvoiceNumber} was created successfully.`;
+
+                    sap.m.MessageBox.success(sSuccessMessage);
                 } catch (oError) {
                     console.error("Submit to SAP failed:", oError);
 
                     sap.m.MessageBox.error(
-                        oError.message || "Posting to SAP failed."
+                        oError instanceof Error && oError.message
+                            ? oError.message
+                            : "Posting to SAP failed."
                     );
                 } finally {
                     oView.setBusy(false);
